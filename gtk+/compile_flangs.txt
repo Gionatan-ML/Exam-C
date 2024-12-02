@@ -1,0 +1,4 @@
+pkg-config --cflangs
+gtk+-3.0
+pkg-config --libs
+gtk+-3.o
