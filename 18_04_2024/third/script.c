@@ -1,3 +1,5 @@
+//FINISHED
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -7,96 +9,71 @@
 #define C_MAX 15
 // Scartare la riga se il 3 valore è 0 o la differenza di secondi rispetto al precedente è < di 5 minuti
 
-int Vm = 60 * 5, len = 0;
-long long ptr = 0;
+int fiveMinutes= 60*5;
 
 typedef struct {
-    long long time;
+    int time;
     float frz;
     float sleep;
     int agit;
 } MyStruct;
 
-void _controll(MyStruct*** status) {
-    len += 1;
-    MyStruct** temp = realloc(*status, sizeof(MyStruct*) * len);
-    if (temp == NULL) {
-        exit(1);
-    }
-    *status = temp;
-    (*status)[len - 1] = malloc(sizeof(MyStruct));
-    if ((*status)[len - 1] == NULL) {
-        exit(1);
-    }
-}
+typedef struct{
+    int time;
+    int presence;
+    int mov;
+    int frz;
+}Condition;
 
-bool firstCond(char* s){
-    char buffer[C_MAX];
+int main(void){
+    int agitation=0;
+    int sum_time=0, sum_prz=0;
+    int length_struct=0;
+    MyStruct result[S_MAX];
+    FILE* input=fopen("input.txt", "r");
+    FILE* output;
+    Condition prev_cond, cond;
+    if(input==NULL){
+        exit(EXIT_FAILURE);
+    }
+    char line[S_MAX];
     int cont=0;
-    long long tmp;
-    while(s[cont]!=','){
-        buffer[cont]=s[cont];
+
+    while(fgets(line, sizeof(line), input)!=NULL){
+        if(cont>0){
+            prev_cond=cond;
+        }
+        sscanf(line, "%d, %d, %d, %d", &cond.time, &cond.frz, &cond.presence, &cond.mov);
+        if(cond.mov==1) agitation++;
+        sum_prz+=cond.presence;
+        if(cont>0){
+            int sum_tmp=cond.time-sum_time;
+            if(cond.time-prev_cond.time>fiveMinutes){
+                if(cond.mov==1 && prev_cond.mov==0){
+                    result[length_struct].frz=(float)cond.frz;
+                }
+                else{
+                    result[length_struct].frz=-1.f;
+                }
+                result[length_struct].sleep=(float) sum_prz/sum_tmp;
+                result[length_struct].agit=agitation;
+                result[length_struct].time=cond.time;
+                length_struct+=1;
+            }
+        }
+        else{
+            sum_time=cond.time;
+        }
         cont++;
     }
-    buffer[cont]='\0';
-    tmp=atoll(buffer);
-    if((tmp-ptr)>=Vm){
-        ptr=tmp;
-        return true;
+    output=fopen("output.bin", "w");
+    if(output==NULL){
+        exit(EXIT_FAILURE);
     }
-    else{
-        ptr=tmp;
-        return false;
+    for(int i=0; i<length_struct; i++){
+        fprintf(output, "{ %d, %f, %f, %d }\n", result[i].time, result[i].frz,result[i].sleep,result[i].agit);
     }
-}
-bool secondCond(char* s){
-    int cont=0,i=0;
-    while(s[i]!='\0'){
-        if(s[i]==','){
-            cont++;
-        }
-        if(cont==2){
-            cont=i-1;
-            break;
-        }
-    }
-    char ffr[1];
-    ffr[0]=s[cont];
-    ffr[1]='\0';
-    int tmp=atoi(ffr);
-    if(tmp==1){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
+    fclose(output);
+    fclose(input);
 
-int main() {
-    bool cont=0;
-    int t_cont=0;
-    MyStruct** condition;
-    char s[S_MAX],buffer[C_MAX];
-    FILE* input=fopen("input.txt", "r");
-    if(input==NULL){
-        exit(0);
-    }
-    while(fgets(s,sizeof(s),input)!=EOF){
-        if(firstCond(s)==true && secondCond(s)==true){
-            _controll(&condition);
-            fscanf(input, "%lld", &condition[len-1]->time);
-            fseek(input,1,SEEK_CUR);
-            fscanf(input, "%f", &condition[len-1]->frz);
-            fseek(input,1,SEEK_CUR);
-            fscanf(input, "%d", &condition[len-1]->sleep);
-            fseek(input,1,SEEK_CUR);
-            fscanf(input, "%d", &condition[len-1]->agit);    
-            printf("Time: %lld, Frz: %.2f, Sleep: %d, Agit: %d\n", condition[len-1]->time, condition[len-1]->frz, condition[len-1]->sleep, condition[len-1]->agit);
-        }
-
-        memset(s,0,sizeof(s));
-    }
-
-
-    return 0;
 }
