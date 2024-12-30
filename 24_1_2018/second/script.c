@@ -98,8 +98,25 @@ void calcMedia(ArrayLength* arrayRig, ArrayLength* arrayCol, int* sumCol, int* s
 
 }
 
+void sorting(MyStruct* result, int len){
+    int isChange;
+    do{
+        isChange=0;
+        for(int i=0; i<len-1; i++){
+            if(result[i].media<result[i+1].media){
+                MyStruct tmp=result[i];
+                result[i]=result[i+1];
+                result[i+1]=tmp;
+                isChange+=1;
+            }
+        }
+
+    }while(isChange!=0);
+}
+
 int main(void){
     init();
+    int cont_rig=0, cont_col=0;
     MyStruct result[MAX];
     int len=0;
     ArrayLength arrayRig, arrayCol;
@@ -119,28 +136,33 @@ int main(void){
 
     char tmp;
     for(int y=0; y<R; y++){
+        cont_rig=0;
         for(int x=0; x<C; x++){
-
             // find if is the sum of rig or col
-
             tmp=findValue(matrice[y][x], y,x);
             if(tmp!='f'){
                 result[len].value= matrice[y][x];
                 result[len].type=tmp;
                 // assign media and sum in function of his type
-                if(result[len].type=='r'){
+                if(result[len].type=='r' && cont_rig==0){
                     result[len].sum= sumRig[y];
                     result[len].media=arrayRig.array[y];
+                    cont_rig++;
                 }
-                else{
+                else if(cont_col==0){
                     result[len].sum= sumCol[x];
                     result[len].media=arrayCol.array[x];
+                    cont_col++;
                 }
                 len++;
             }
 
         }
+        cont_col=0;
     }
+    // using buble sort for sorting the array of struct
+    sorting(result, len);
+
     FILE* output=fopen("output.bin", "w");
     if(output==NULL){
         exit(EXIT_FAILURE);
