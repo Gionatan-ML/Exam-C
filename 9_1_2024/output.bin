@@ -1,0 +1,7 @@
+{ sopra ,1, [ Line: 0, Pos: 0 ||  ] } 
+{ la ,4, [ Line: 0, Pos: 6 || Line: 0, Pos: 15 || Line: 1, Pos: 6 || Line: 1, Pos: 15 ||  ] } 
+{ panca ,2, [ Line: 0, Pos: 9 || Line: 1, Pos: 9 ||  ] } 
+{ capra ,2, [ Line: 0, Pos: 18 || Line: 1, Pos: 18 ||  ] } 
+{ campa,1, [ Line: 0, Pos: 25 ||  ] } 
+{ sotto ,1, [ Line: 1, Pos: 0 ||  ] } 
+{ crepa,1, [ Line: 1, Pos: 24 ||  ] } 
