@@ -1,0 +1,24 @@
+Line: accccbbbaaa agggg
+ 1: a | 4: c | 3: b | 3: a | 1:   | 1: a | 4: g |
+Vettore di struct: 
+a -> 1
+c -> 4
+b -> 3
+a -> 3
+  -> 1
+a -> 1
+g -> 4
+
+Len: 7
+
+Line: ppppakklleee
+ 4: p | 1: a | 2: k | 2: l | 3: e |
+Vettore di struct: 
+p -> 4
+a -> 1
+k -> 2
+l -> 2
+e -> 3
+
+Len: 5
+
