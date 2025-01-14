@@ -1,3 +1,5 @@
+//Finish
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -91,7 +93,7 @@ void sorting(MyStruct* result, int length){
 
     do{
         cont=0;
-        
+
         for(int i=0; i<length-1; i++){
             if(result[i].len<result[i+1].len){
                 MyStruct tmp=result[i];
